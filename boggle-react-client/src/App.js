@@ -1,21 +1,26 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Home  from './component/Home';
+import Layout  from './component/Layout';
+import NavigationBar from './component/NavigationBar';
+import Boggle from './component/Boggle';
+
 class App extends Component {
-
-  componentDidMount(){
-    fetch('/api/boggle/index')
-    .then(response=> console.log(response))
-    .then(json=> console.log(json))
-    .catch(error=> console.log(error))
-  }
-
   render() {
     return (
-      <div className="App">
-        Hello World
-    </div>
+      <React.Fragment>
+        <Router>
+          <NavigationBar />
+          <Layout>
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/boggle" component={Boggle} />
+            </Switch>
+          </Layout>
+        </Router>
+      </React.Fragment>
     );
   }
 }
+
 export default App;
