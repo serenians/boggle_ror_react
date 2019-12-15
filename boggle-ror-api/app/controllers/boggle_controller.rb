@@ -1,18 +1,11 @@
 class BoggleController < ApplicationController
+
   def index
-    render json: 'ok'
-  end
 
-  def start
-    @boggle = Boggle.new
-    render json: @boggle.generateLetterString
-end
-
-  def check
-
-  end
-
-  def submit
-
+    # consider a serializer? - need a strategy for managing
+    # REST JSON contracts - often do not want internal
+    # model properties to be included in serialization process
+    @board = Boggle.new
+    render json: @board
   end
 end

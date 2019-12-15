@@ -1,0 +1,4 @@
+#AppId for Oxford Dictionary API
+DICTIONARY_API_APP_ID = "f83a39c9"
+    #App Key for Oxford Dictionary API
+DICTIONARY_API_APP_KEY = "a46997c33d69536ce942da5880e06da0"
