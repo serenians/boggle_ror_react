@@ -18,15 +18,15 @@ class DictionaryGateway
           method: :get,
           url: "https://od-api.oxforddictionaries.com/api/v2/entries/en-us/#{word}",
           timeout: TIMEOUT_SECONDS,
-          headers: { 'app_id' => ENV['BOGGLE_APP_ID'],
-                     'app_key' => ENV['BOGGLE_APP_KEY'] }
+          headers: { 'app_id' => ENV['DICTIONARY_API_APP_ID'],
+                     'app_key' => ENV['DICTIONARY_API_APP_KEY'] }
       )
 
     rescue RestClient::Forbidden
       Rails.logger.debug do
         '403 Forbidden from Oxford API ' \
-        "BOGGLE_APP_ID=#{ENV['BOGGLE_APP_ID']};" \
-          "BOGGLE_APP_KEY=#{ENV['BOGGLE_APP_KEY']}"
+        "BOGGLE_APP_ID=#{ENV['DICTIONARY_API_APP_ID']};" \
+          "BOGGLE_APP_KEY=#{ENV['DICTIONARY_API_APP_KEY']}"
       end
       raise
     rescue RestClient::NotFound

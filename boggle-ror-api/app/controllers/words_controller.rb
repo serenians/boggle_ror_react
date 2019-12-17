@@ -15,18 +15,17 @@ class WordsController < ApplicationController
       # check the cache first - only go to the oxford dictionary if
       # it doesn't exist in our simple word cache
       word_cache_store = MiniCache::Store.new
-      word.exists = true if (word_cache_store.get(word.term) != nil)
-      #word_cache = WordCache.new
-      #if word_cache.exists?(word.term)
-      #  word.exists = true
-    else
-      # allowing exceptions from underlying api to throw 500 status code
-      # and generate a log entry - to protect system from downstream
-      # latency and failures, use circuit breaker
-      word.exists = DictionaryGateway.new.exists(word.term)
-      word_cache_store.set(word.term, '') if word.exists
-      #word_cache.add(word.term) if word.exists
+      if !word_cache_store.get(word.term).nil?
+        word.exists = true
+      else
+        # allowing exceptions from underlying api to throw 500 status code
+        # and generate a log entry - to protect system from downstream
+        # latency and failures, use circuit breaker
+        word.exists = DictionaryGateway.new.exists(word.term)
+        word_cache_store.set(word.term, '') if word.exists
+        #word_cache.add(word.term) if word.exists
 
+      end
     end
 
     render json: word
