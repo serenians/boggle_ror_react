@@ -3,6 +3,8 @@ import './Game.css';
 import Board from './Board';
 import WordCheck from './WordCheck';
 import Timer from './Timer';
+import { tsMethodSignature } from '@babel/types';
+import { Score } from './Score';
 
 export default class Game extends React.Component {
   constructor(props) {
@@ -16,7 +18,7 @@ export default class Game extends React.Component {
     this.state = {
       tiles: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
       isGameFinished: false,
-      timeLimit: 10,
+      timeLimit: 60,
       score: 0,
       correctWords: [],
       inCorrectWords: []
@@ -25,9 +27,8 @@ export default class Game extends React.Component {
 
   handleTimeOut() {
     console.log('handling timeout');
-    this.state.isGameFinished = true;
+    this.setState({isGameFinished: true})
     console.log('isGameFinished:' + this.state.isGameFinished)
-    this.renderWordChecker();
   }
 
 
@@ -38,17 +39,23 @@ export default class Game extends React.Component {
   }
 
   handleCorrectWord(word) {
-    this.state.correctWords.push(word);
-    this.score = this.score + word.length;
+    console.log('handling correct word:' + word)
+    let correctWords = this.state.correctWords
+    correctWords.push(word);
+    let score = this.state.score + word.length;
+    this.setState({ score: score, correctWords: correctWords });
   }
 
   handleIncorrectWord(word) {
-    this.state.inCorrectWords.push(word);
+    console.log('handling in correct word:' + word)
+    let inCorrectWords = this.state.inCorrectWords;
+    inCorrectWords.push(word);
+    this.setState({ inCorrectWords: inCorrectWords })
   }
 
   renderWordChecker() {
     if (this.state.isGameFinished) {
-      return <label>Game Over!</label>
+      return <h3>Game Over!</h3>
     }
     else {
       return <WordCheck tiles={this.state.tiles} onCorrectWordEntered={this.handleCorrectWord} onIncorrectWordEntered={this.handleIncorrectWord} />
@@ -73,6 +80,7 @@ export default class Game extends React.Component {
         </div>
         <div className="col-xs-12 col-md-2">
           <h2>Score</h2>
+          <Score score={this.state.score}/>
         </div>
       </div>
 

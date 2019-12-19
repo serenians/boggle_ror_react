@@ -36,10 +36,10 @@ export default class Board extends React.Component {
     }).then(res => res.json())
       .then(json => {
         this.setState({ isValid: json.exists, hasStatusMessage: true });
-        if(json.exists){
+        if (json.exists) {
           this.props.onCorrectWordEntered(this.state.text)
         }
-        else{
+        else {
           this.props.onIncorrectWordEntered(this.state.text);
         }
       })
@@ -52,19 +52,15 @@ export default class Board extends React.Component {
       <div id="word-submit">
         <form onSubmit={this.handleSubmit}>
           <label id="spaced">
-            <strong>Current Word:</strong>
+            <strong>Enter your Word:</strong>
           </label>
-          <input
+          <input className="form-input"
             id="spaced"
             onChange={this.handleChange}
             value={this.state.text}
           />
-          <button
-            id="spaced"
-            type="button"
-            onClick={this.handleSubmit}
-          >
-            Submit Word
+          <button className="btn btn-success" id="spaced" type="button" onClick={this.handleSubmit}>
+            Check your word
           </button>
           {this.state.hasStatusMessage === true &&
             <div id="status-message">
