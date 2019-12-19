@@ -16,7 +16,6 @@ export default class Board extends React.Component {
   }
 
   handleSubmit(e) {
-
     // console.log('handle submit -> state text: ' + this.state.text);
     e.preventDefault();
     if (!this.state.text.length) {
@@ -35,7 +34,15 @@ export default class Board extends React.Component {
       },
       body: JSON.stringify({ term: this.state.text, tiles: this.props.tiles })
     }).then(res => res.json())
-      .then(json => this.setState({ isValid: json.exists, hasStatusMessage: true }))
+      .then(json => {
+        this.setState({ isValid: json.exists, hasStatusMessage: true });
+        if(json.exists){
+          this.props.onCorrectWordEntered(this.state.text)
+        }
+        else{
+          this.props.onIncorrectWordEntered(this.state.text);
+        }
+      })
       .then(data => console.log(JSON.stringify(data)))
       .catch(error => console.error('Error:', error));
   }

@@ -1,7 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Intro
-This is the client web project for boggle. And now this project basically displays the board and allows the user to enter the word and on submit, this can post the API project running for validity
+This is the client web project for boggle. And now this project basically displays the board and allows the user to enter the word and on submit, this can post the API project running for validity.
 
 
 
