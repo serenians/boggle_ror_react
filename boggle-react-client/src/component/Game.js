@@ -3,8 +3,12 @@ import './Game.css';
 import Board from './Board';
 import WordCheck from './WordCheck';
 import Timer from './Timer';
+import { NotificationContainer, NotificationManager, Notifications } from 'react-notifications';
+
+
 import { tsMethodSignature } from '@babel/types';
 import { Score } from './Score';
+import WordList from './WordList';
 
 export default class Game extends React.Component {
   constructor(props) {
@@ -27,12 +31,13 @@ export default class Game extends React.Component {
 
   handleTimeOut() {
     console.log('handling timeout');
-    this.setState({isGameFinished: true})
+    this.setState({ isGameFinished: true })
     console.log('isGameFinished:' + this.state.isGameFinished)
   }
 
 
   handleBoardChange(tiles) {
+    NotificationManager.success("Board Loaded");
     let newState = this.state;
     newState.tiles = tiles;
     this.setState(newState)
@@ -40,17 +45,30 @@ export default class Game extends React.Component {
 
   handleCorrectWord(word) {
     console.log('handling correct word:' + word)
+
     let correctWords = this.state.correctWords
-    correctWords.push(word);
-    let score = this.state.score + word.length;
-    this.setState({ score: score, correctWords: correctWords });
+    if (correctWords.filter((item) => { return item == word }).length > 0) {
+      //word already in the list
+      console.log('correct word already in the list')
+    }
+    else {
+      correctWords.push(word);
+      let score = this.state.score + word.length;
+      this.setState({ score: score, correctWords: correctWords });
+    }
   }
 
   handleIncorrectWord(word) {
-    console.log('handling in correct word:' + word)
     let inCorrectWords = this.state.inCorrectWords;
-    inCorrectWords.push(word);
-    this.setState({ inCorrectWords: inCorrectWords })
+    if (inCorrectWords.filter((item) => { return item == word }).length > 0) {
+      //word already in the list
+      console.log('word already in the list')
+    }
+    else {
+      console.log('handling in correct word:' + word)
+      inCorrectWords.push(word);
+      this.setState({ inCorrectWords: inCorrectWords })
+    }
   }
 
   renderWordChecker() {
@@ -80,7 +98,11 @@ export default class Game extends React.Component {
         </div>
         <div className="col-xs-12 col-md-2">
           <h2>Score</h2>
-          <Score score={this.state.score}/>
+          <Score score={this.state.score} />
+          <h3>Correct words</h3>
+          <WordList words={this.state.correctWords}></WordList>
+          <h3>Incorrect Words</h3>
+          <WordList words={this.state.inCorrectWords}></WordList>
         </div>
       </div>
 
