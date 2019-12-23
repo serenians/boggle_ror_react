@@ -5,7 +5,7 @@ export default class Board extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { text: '', hasStatusMessage: false, isValid: false };
+    this.state = { text: '', hasStatusMessage: false, isValid: false, correctWords: [], incorrectWords: [] };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -19,6 +19,18 @@ export default class Board extends React.Component {
     // console.log('handle submit -> state text: ' + this.state.text);
     e.preventDefault();
     if (!this.state.text.length) {
+      return;
+    }
+
+    let text = this.state.text;
+    console.log(this.state.correctWords);
+    if(this.state.correctWords.filter(function(item){return item == text}).length > 0){
+      console.log('you have already found the word');
+      return;
+    }
+
+    if(this.state.incorrectWords.filter(function(item){return item === text}).length > 0){
+      console.log('you have already tried the word');
       return;
     }
 
@@ -37,9 +49,16 @@ export default class Board extends React.Component {
       .then(json => {
         this.setState({ isValid: json.exists, hasStatusMessage: true });
         if (json.exists) {
+          let correctWords = this.state.correctWords;
+          correctWords.push(this.state.text)
+          this.setState({correctWords:correctWords})
           this.props.onCorrectWordEntered(this.state.text)
         }
         else {
+          
+          let incorrectWords = this.state.incorrectWords;
+          incorrectWords.push(this.state.text);
+          this.setState({incorrectWords:incorrectWords})
           this.props.onIncorrectWordEntered(this.state.text);
         }
       })

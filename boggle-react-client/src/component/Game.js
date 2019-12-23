@@ -4,7 +4,9 @@ import Board from './Board';
 import WordCheck from './WordCheck';
 import Timer from './Timer';
 import { NotificationContainer, NotificationManager, Notifications } from 'react-notifications';
-
+import { store } from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';
+import 'animate.css';
 
 import { tsMethodSignature } from '@babel/types';
 import { Score } from './Score';
@@ -29,23 +31,44 @@ export default class Game extends React.Component {
     };
   }
 
+  addNotification(title, message, type) {
+    store.addNotification({
+      title: title,
+      message: message,
+      type: type,                         // 'default', 'success', 'info', 'warning'
+      container: 'top-right',                // where to position the notifications
+      animationIn: ["animated", "fadeIn"],     // animate.css classes that's applied
+      animationOut: ["animated", "fadeOut"],   // animate.css classes that's applied
+      dismiss: {
+        duration: 3000
+      }
+    })
+  }
+
   handleTimeOut() {
-    console.log('handling timeout');
+    // console.log('handling timeout');
+    this.addNotification('Boggle', 'Time Up', 'warning')
     this.setState({ isGameFinished: true })
-    console.log('isGameFinished:' + this.state.isGameFinished)
+    if (this.state.score > 0) {
+      this.addNotification('Boggle', 'Congratulations! You scored ' + this.state.score, 'success');
+    }
+    else {
+      this.addNotification('Boggle', 'Sorry! you could not score a point.', 'warning')
+    }
+    // console.log('isGameFinished:' + this.state.isGameFinished)
   }
 
 
   handleBoardChange(tiles) {
-    NotificationManager.success("Board Loaded");
+    this.addNotification('Boggle', 'Game Start', 'success')
     let newState = this.state;
     newState.tiles = tiles;
     this.setState(newState)
   }
 
   handleCorrectWord(word) {
-    console.log('handling correct word:' + word)
-
+    // console.log('handling correct word:' + word)
+    this.addNotification('Boggle', 'Yay! ' + word + ' was correct.', 'success')
     let correctWords = this.state.correctWords
     if (correctWords.filter((item) => { return item == word }).length > 0) {
       //word already in the list
@@ -59,6 +82,7 @@ export default class Game extends React.Component {
   }
 
   handleIncorrectWord(word) {
+    this.addNotification('Boggle', 'Nay! ' + word + ' was in correct.', 'warning')
     let inCorrectWords = this.state.inCorrectWords;
     if (inCorrectWords.filter((item) => { return item == word }).length > 0) {
       //word already in the list
