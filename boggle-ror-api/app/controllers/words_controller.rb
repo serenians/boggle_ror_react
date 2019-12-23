@@ -1,7 +1,14 @@
 # controller class for managing words in the board
 class WordsController < ApplicationController
+
+  def initialize(dictionary_gateway: DictionaryGateway.new)
+    @dictionary_gateway = dictionary_gateway;
+  end
+
+  #
   # following the create convention - even though not using
   # resource: BoggleBoard with constraints
+  # @return [Object]
   def create
     word = Word.new(params['term'], false)
 
@@ -21,9 +28,8 @@ class WordsController < ApplicationController
         # allowing exceptions from underlying api to throw 500 status code
         # and generate a log entry - to protect system from downstream
         # latency and failures, use circuit breaker
-        word.exists = DictionaryGateway.new.exists(word.term)
+        word.exists = @dictionary_gateway.exists(word.term)
         word_cache_store.set(word.term, '') if word.exists
-        #word_cache.add(word.term) if word.exists
 
       end
     end
