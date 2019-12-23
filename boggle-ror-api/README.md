@@ -6,9 +6,14 @@ This is the API project that basically hosts two endpoint.
 
 This project is responsible for generating a set of characters required for a board (i.e. 16 characters), and let the client make a request for chekcing the word is valid, is from dice and a valid word. A valid word is checked using a GET request to Oxford API.
 
+*Limitations
 Tried using MiniCache, for storing list of valid word in a Memory based cache, but not working.
 
-Things you may want to cover:
+*Tests
+I have implemented tests for boggle controller and words controller. Since, Boggle Controller has a simple action of returning a list of characters for creating a board, I have written only one test whether the action responds with tiles object.
+And, in case of WordsController, I have written 5 tests:
+
+* Project Configurations:
 
 * Ruby version
 ruby 2.6.5p114 (2019-10-01 revision 67812) [x64-mingw32]
@@ -21,12 +26,11 @@ no database used.
 * Database initialization
 should not require database initialization
 * How to run the test suite
-no tests
+  rake spec
 * Services (job queues, cache servers, search engines, etc.)
 tried using Mem Cache from MiniCache (not working)
 * Deployment instructions
 
-* Limitation:
 
 
 
